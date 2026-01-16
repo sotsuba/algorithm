@@ -17,16 +17,14 @@ is_sunday() {
 sync_for_the_day() {
     local timestamp=$(date +'%Y-%m-%d')
 
-    if has_changes; then 
-        echo "[$(date)] Starting daily sync..." >> "$STAMP_LOGS"
-        {
-            git add . && \
-            git commit -m "daily-sync: $timestamp" && \
-            git push origin main
-        } >> "$STAMP_LOGS" 2>&1
-        return $?
-    fi
-    return 0
+    echo "[$(date)] Starting daily sync..." >> "$STAMP_LOGS"
+    {
+        git add . && \
+        git commit -m "daily-sync: $timestamp" && \
+        git push origin main
+    } >> "$STAMP_LOGS" 2>&1
+
+    return $?
 }
 
 sync_for_the_week() {
@@ -53,13 +51,15 @@ alert_user() {
 }
 
 main() {
-    if sync_for_the_day; then
-        if is_sunday; then 
-            sync_for_the_week 
-        fi
-    else
+    if has_changes; then 
+        sync_for_the_day
+    else 
         alert_user "github(algorithm)" "No local changes detected for $timestamp."
-        return 0
+    fi 
+
+
+    if is_sunday; then 
+        sync_for_the_week 
     fi
 }
 
