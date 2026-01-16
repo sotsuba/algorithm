@@ -6,7 +6,6 @@ and algorithms. It contains solutions implemented in Rust, Python, and C++.
 
 
 
-
 REPOSITORY STRUCTURE
 ====================
 
@@ -28,18 +27,15 @@ PREREQUISITES
 
 
 
-
 AUTOMATION
 ==========
 
 If you are not interested in my boring repo, feel free to use my automated 
 LeetCode fetcher. It uses the LeetCode GraphQL API to sync your solutions.
 
-
 The tool is currently in a "bare-bones" state and is not fully documented.
 If you wish to use it, please raise an issue on GitHub, and documentation
 will be provided upon request.
-
 
 SETUP
 -----
@@ -59,14 +55,12 @@ How to get credentials:
 
 
 << crontab >>
-
 Example crontab configuration (This is my setup):
   # 1. Fetch data from LeetCode (21:55)
   55 21 * * * /bin/bash /path/to/repo/scripts/fetch_leetcode.sh
 
   # 2. Sync changes to GitHub (22:00)
   0 22 * * * /bin/bash /path/to/repo/scripts/sync.sh
-
 
 
 
