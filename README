@@ -1,35 +1,56 @@
-Algorithm
-====================
+ALGORITHM
+=========
 
 This is a personal repository for tracking progress through data structures
 and algorithms. It contains solutions implemented in Rust, Python, and C++.
 
 
+
 REPOSITORY STRUCTURE
--------------
+====================
+
 The repository is structured as follows:
 
-  cses/          Practice ground for algorithms.
+  cses/          Algorithm practice platform.
   leetcode/      Challenge solutions.
   logs/          Crontab, GitHub, and fetcher execution logs.
   marisaoj/      Algorithm practice platform.
-  playground/    Personal sandbox for prototyping.
-  scripts/       Automation and sync tools.
-
+  playground/    Personal sandbox.
+  scripts/       Automation and sync scripts.
 
 PREREQUISITES
 -------------
+
   - Rust, Cargo.
   - C++17 or later.
   - Python 3.10+
 
 
-AUTOMATION
-----------
 
-The automation scripts are designed to be scheduled via crontab. It is 
-recommended to use absolute paths or to change into the script directory 
-before execution to ensure environment variables are loaded correctly.
+AUTOMATION
+==========
+
+If you are not interested in my boring repo, feel free to use my automated 
+LeetCode fetcher. It uses the LeetCode GraphQL API to sync your solutions.
+
+
+The tool is currently in a "bare-bones" state and is not fully documented.
+If you wish to use it, please raise an issue on GitHub, and documentation
+will be provided upon request.
+
+
+SETUP
+-----
+
+>> .env
+The tool requires a '.env' file in 'scripts/fetch_leetcode/'.
+Template:
+  LEETCODE_SESSION=<your_session_cookie>
+  CSRF_TOKEN=<your_csrf_token>
+  USER_AGENT=<your_user_agent>
+
+
+>> crontab
 
 Example crontab configuration (This is my setup):
   # 1. Fetch data from LeetCode (21:55)
@@ -38,17 +59,19 @@ Example crontab configuration (This is my setup):
   # 2. Sync changes to GitHub (22:00)
   0 22 * * * /bin/bash /path/to/repo/scripts/sync.sh
 
-If you are not interested in the notes, the 'fetch_leetcode' tool in the
-scripts directory provides an automated engine for syncing LeetCode data.
-This can be used as a source for external services, such as a Telegram bot.
+>> details
 
-The tool is currently in a "bare-bones" state and is not fully documented.
-If you wish to use it, please raise an issue on GitHub, and documentation
-will be provided upon request.
+How to get credentials:
+  1. Log in to leetcode.com in your browser.
+  2. Open Developer Tools (F12) -> Application (or Storage) tab.
+  3. Look under Cookies -> https://leetcode.com.
+  4. Copy the 'LEETCODE_SESSION' and 'csrftoken' values into your .env.
 
+To run the fetcher:
+  $ cd scripts/fetch_leetcode && cargo run --releas
 
 HOW TO BLAME MY CODE 
---------------------
+====================
 If you find a bug, a suboptimal complexity (O(N^2) when O(N log N) is possible), 
 or just hate my coding style, feel free to submit a Pull Request.
 
