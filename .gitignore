@@ -1,3 +1,6 @@
 *.log
 .env
-target/target/
+target/
+/main.cpp
+/main.py
+/main.rs
