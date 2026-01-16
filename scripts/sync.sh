@@ -22,7 +22,7 @@ sync_for_the_day() {
         git add . && \
         git commit -m "daily-sync: $timestamp" && \
         git push origin main
-    } >> "$STAMP_LOGS" 2>&1
+    } | tee -a "$STAMP_LOGS" 2>&1
 
     return $?
 }
@@ -33,7 +33,7 @@ sync_for_the_week() {
     local base_sha=$(git rev-list -n 1 --before="7 days ago" HEAD)
 
     if [[ -n "$base_sha" ]]; then 
-        echo "[$(date)] Starting weekly squash..." >> "$STAMP_LOGS"
+        echo "[$(date)] Starting weekly squash..." | tee -a "$STAMP_LOGS"
         {
             git reset --soft "$base_sha" && \
             git commit -m "weekly-sync(${week_num}): $timestamp" && \

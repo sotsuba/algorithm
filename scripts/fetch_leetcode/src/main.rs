@@ -7,4 +7,5 @@ fn main() {
     println!("{headers:#?}");
 
     let client = reqwest::Client::new();
+    let res = client.post("")
 }
