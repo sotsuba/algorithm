@@ -6,6 +6,7 @@ and algorithms. It contains solutions implemented in Rust, Python, and C++.
 
 
 
+
 REPOSITORY STRUCTURE
 ====================
 
@@ -27,6 +28,7 @@ PREREQUISITES
 
 
 
+
 AUTOMATION
 ==========
 
@@ -42,15 +44,21 @@ will be provided upon request.
 SETUP
 -----
 
->> .env
+<< .env >>
 The tool requires a '.env' file in 'scripts/fetch_leetcode/'.
 Template:
   LEETCODE_SESSION=<your_session_cookie>
   CSRF_TOKEN=<your_csrf_token>
   USER_AGENT=<your_user_agent>
 
+How to get credentials:
+  1. Log in to leetcode.com in your browser.
+  2. Open Developer Tools (F12) -> Application (or Storage) tab.
+  3. Look under Cookies -> https://leetcode.com.
+  4. Copy the 'LEETCODE_SESSION' and 'csrftoken' values into your .env.
 
->> crontab
+
+<< crontab >>
 
 Example crontab configuration (This is my setup):
   # 1. Fetch data from LeetCode (21:55)
@@ -59,19 +67,12 @@ Example crontab configuration (This is my setup):
   # 2. Sync changes to GitHub (22:00)
   0 22 * * * /bin/bash /path/to/repo/scripts/sync.sh
 
->> details
 
-How to get credentials:
-  1. Log in to leetcode.com in your browser.
-  2. Open Developer Tools (F12) -> Application (or Storage) tab.
-  3. Look under Cookies -> https://leetcode.com.
-  4. Copy the 'LEETCODE_SESSION' and 'csrftoken' values into your .env.
 
-To run the fetcher:
-  $ cd scripts/fetch_leetcode && cargo run --releas
 
 HOW TO BLAME MY CODE 
 ====================
+
 If you find a bug, a suboptimal complexity (O(N^2) when O(N log N) is possible), 
 or just hate my coding style, feel free to submit a Pull Request.
 
