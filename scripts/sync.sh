@@ -44,14 +44,18 @@ sync_for_the_week() {
     return 0
 }
 
+alert_user() {
+    local title=$1
+    local msg=$2
+    notify-send -i "info" -t 5000 "$title" "$msg"
+}
 
 main() {
     if has_changes; then 
         sync_for_the_day
     else 
-        source "${SCRIPT_DIR}/alert.sh"
+        alert_user "github" "No local changes detected repo(algorithm)."
     fi 
-
 
     if is_sunday; then 
         sync_for_the_week 

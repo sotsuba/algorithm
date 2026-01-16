@@ -1,20 +1,21 @@
 #include <iostream>
+#include <string> 
 
 int main() {
-    int n;
-    std::cin >> n;
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
 
-    int prev = -1;
-    long long res = 0;
-    for (int 
-        i = 0 ; i < n; i++) {
-        int cur;
-        std::cin >> cur;
-        if (prev == -1 || cur >= prev) 
-            prev = cur;
+    std::string s;
+    std::cin >> s;
     
-        res += (prev - cur);
+    int n = s.length();
+    
+    int res = 1;
+    int cur = 1;
+    for (int i = 1; i < n; i++) {
+        cur = (s[i] == s[i - 1]) ? cur + 1 : 1;
+        res = std::max(res, cur);
     }
 
-    std::cout << res;
+    std::cout << res << '\n';
 }
