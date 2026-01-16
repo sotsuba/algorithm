@@ -1,8 +1,7 @@
 #!/bin/bash 
 
-SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
-PROJECT_DIR=$(cd -- "${SCRIPT_DIR}/.." && pwd)
-STAMP_LOGS="${PROJECT_DIR}/logs/stamps.log"
+ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "${ROOT_DIR}/constants.sh"
 
 cd "$PROJECT_DIR" || exit 1
 
@@ -17,12 +16,12 @@ is_sunday() {
 sync_for_the_day() {
     local timestamp=$(date +'%Y-%m-%d')
 
-    echo "[$(date)] Starting daily sync..." | tee -a "$STAMP_LOGS"
+    echo "[$(date)] Starting daily sync..." | tee -a "$GITHUB_LOGS"
     {
         git add . && \
         git commit -m "daily-sync: $timestamp" && \
         git push origin main
-    } | tee -a "$STAMP_LOGS" 2>&1
+    } | tee -a "$GITHUB_LOGS" 2>&1
 
     return $?
 }
@@ -33,12 +32,12 @@ sync_for_the_week() {
     local base_sha=$(git rev-list -n 1 --before="7 days ago" HEAD)
 
     if [[ -n "$base_sha" ]]; then 
-        echo "[$(date)] Starting weekly squash..." | tee -a "$STAMP_LOGS"
+        echo "[$(date)] Starting weekly squash..." | tee -a "$GITHUB_LOGS"
         {
             git reset --soft "$base_sha" && \
             git commit -m "weekly-sync(${week_num}): $timestamp" && \
             git push origin main --force-with-lease 
-        } >> "$STAMP_LOGS" 2>&1
+        } >> "$GITHUB_LOGS" 2>&1
         return $?
     fi 
     return 0
@@ -51,6 +50,8 @@ alert_user() {
 }
 
 main() {
+    echo "$(date) - crontab(sync)" >> $CRONTAB_LOGS
+    
     if has_changes; then 
         sync_for_the_day
     else 

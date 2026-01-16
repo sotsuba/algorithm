@@ -1,11 +1,22 @@
-use reqwest::header::{self, HeaderMap, HeaderValue, HeaderName};
+mod models;
+mod utils;
+mod client;
+use std::fs;
+use std::env;
+use models::Language;
 
-fn main() {
-    let mut headers = HeaderMap::new();
-    headers.insert(header::USER_AGENT, HeaderValue::from_static("Mozilla/5.0"));
-    headers.insert(header::REFERER, HeaderValue::from_static("https://leetcode.com/"));
-    println!("{headers:#?}");
 
-    let client = reqwest::Client::new();
-    let res = client.post("")
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenvy::dotenv().ok();
+    let session = env::var("LEETCODE_SESSION")?;
+    let csrf_token = env::var("LEETCODE_CSRF")?;
+    let user_agent = env::var("USER_AGENT")?;
+    
+    let client = client::Client::new(&session, &csrf_token, &user_agent).await?;
+    let code = client.get_latest_accepted_code(Language::Cpp).await?;
+    let code = client.get_latest_accepted_code(Language::Rust).await?;
+    let code = client.get_latest_accepted_code(Language::Python).await?;
+    Ok(())
 }
+

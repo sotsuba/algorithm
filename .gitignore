@@ -1,2 +1,2 @@
 *.log
-scripts/fetch_leetcode
+.env
