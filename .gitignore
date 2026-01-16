@@ -1,6 +1,4 @@
 *.log
 .env
 target/
-/main.cpp
-/main.py
-/main.rs
+playground/bin/*
