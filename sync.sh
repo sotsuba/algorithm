@@ -54,7 +54,7 @@ main() {
     if has_changes; then 
         sync_for_the_day
     else 
-        alert_user "github(algorithm)" "No local changes detected for $timestamp."
+        alert_user "github" "No local changes detected repo(algorithm)."
     fi 
 
 
