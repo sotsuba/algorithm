@@ -17,7 +17,7 @@ is_sunday() {
 sync_for_the_day() {
     local timestamp=$(date +'%Y-%m-%d')
 
-    echo "[$(date)] Starting daily sync..." >> "$STAMP_LOGS"
+    echo "[$(date)] Starting daily sync..." | tee -a "$STAMP_LOGS"
     {
         git add . && \
         git commit -m "daily-sync: $timestamp" && \
