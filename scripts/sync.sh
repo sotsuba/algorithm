@@ -1,10 +1,10 @@
 #!/bin/bash 
 
-PROJECT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
-cd "$PROJECT_DIR" || exit 1
-
-mkdir -p "${PROJECT_DIR}/logs"
+SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
+PROJECT_DIR=$(cd -- "${SCRIPT_DIR}/.." && pwd)
 STAMP_LOGS="${PROJECT_DIR}/logs/stamps.log"
+
+cd "$PROJECT_DIR" || exit 1
 
 has_changes() {
     [[ -n $(git status --porcelain) ]]
@@ -49,7 +49,7 @@ main() {
     if has_changes; then 
         sync_for_the_day
     else 
-        source "${PROJECT_DIR}/scripts/alert.sh"
+        source "${SCRIPT_DIR}/alert.sh"
     fi 
 
 
