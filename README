@@ -4,6 +4,7 @@ Algorithm
 This is a personal repository for tracking progress through data structures
 and algorithms. It contains solutions implemented in Rust, Python, and C++.
 
+
 REPOSITORY STRUCTURE
 -------------
 The repository is structured as follows:
@@ -15,11 +16,13 @@ The repository is structured as follows:
   playground/    Personal sandbox for prototyping.
   scripts/       Automation and sync tools.
 
+
 PREREQUISITES
 -------------
   - Rust, Cargo.
   - C++17 or later.
   - Python 3.10+
+
 
 AUTOMATION
 ----------
