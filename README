@@ -38,8 +38,16 @@ Example crontab configuration (This is my setup):
   # 2. Sync changes to GitHub (22:00)
   0 22 * * * /bin/bash /path/to/repo/scripts/sync.sh
 
+If you are not interested in the notes, the 'fetch_leetcode' tool in the
+scripts directory provides an automated engine for syncing LeetCode data.
+This can be used as a source for external services, such as a Telegram bot.
 
-HOW TO BLAME MY CODE
+The tool is currently in a "bare-bones" state and is not fully documented.
+If you wish to use it, please raise an issue on GitHub, and documentation
+will be provided upon request.
+
+
+HOW TO BLAME MY CODE 
 --------------------
 If you find a bug, a suboptimal complexity (O(N^2) when O(N log N) is possible), 
 or just hate my coding style, feel free to submit a Pull Request.
@@ -59,14 +67,6 @@ I will review your "blame" and merge it if it is technically superior.
 Please do this—it helps me learn and improves the rigor of this repository.
 
 
-THIS IS FOR YOU <3 
-----------
 
-If you are not interested in the notes, the 'fetch_leetcode' tool in the
-scripts directory provides an automated engine for syncing LeetCode data.
-This can be used as a source for external services, such as a Telegram bot.
 
-The tool is currently in a "bare-bones" state and is not fully documented.
-If you wish to use it, please raise an issue on GitHub, and documentation
-will be provided upon request.
 
