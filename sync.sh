@@ -46,14 +46,20 @@ sync_for_the_week() {
     return 0
 }
 
+alert_user() {
+    local title=$1
+    local msg=$2
+    notify-send -i "info" -t 5000 "$title" "$msg"
+}
+
 main() {
     if sync_for_the_day; then
         if is_sunday; then 
             sync_for_the_week 
         fi
     else
-        echo "Daily sync failed. Aborting weekly squash for safety." >&2
-        exit 1
+        alert_user "github(algorithm)" "No local changes detected for $timestamp."
+        return 0
     fi
 }
 
