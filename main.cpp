@@ -7,12 +7,10 @@ int main() {
 
     std::string s;
     std::cin >> s;
-    
-    int n = s.length();
-    
-    int res = 1;
+
+    int res = s.empty() ? 0 : 1;
     int cur = 1;
-    for (int i = 1; i < n; i++) {
+    for (int i = 1; i < s.length(); i++) {
         cur = (s[i] == s[i - 1]) ? cur + 1 : 1;
         res = std::max(res, cur);
     }
