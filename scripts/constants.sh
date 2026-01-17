@@ -5,4 +5,4 @@ TARGET_DIR="${SCRIPT_DIR}/fetch_leetcode"
 LEETCODE_LOGS="${PROJECT_DIR}/logs/leetcode.log"
 CRONTAB_LOGS="${PROJECT_DIR}/logs/crontab.log"
 GITHUB_LOGS="${PROJECT_DIR}/logs/github.log"
-
+export SSH_AUTH_SOCK=$(ls /tmp/ssh-*/agent.* | head -1)

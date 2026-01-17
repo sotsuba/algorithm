@@ -22,4 +22,5 @@ impl<'a> Scanner<'a> {
 fn main() {
     let mut buffer = String::new();
     std::io::stdin().read_to_string(&mut buffer).expect("Cannot read from stdin");
+    
 }
