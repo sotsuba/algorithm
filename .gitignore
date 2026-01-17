@@ -1,4 +1,11 @@
 *.log
 .env
+**/target/
+**/target/debug/
+**/target/release/
 scripts/fetch_leetcode/target/
 playground/bin/*
+
+**/*.pyc 
+__pycache__/
+bin/

@@ -30,6 +30,20 @@ pub fn get_problem_dir(question: &QuestionMetadata) -> Result<PathBuf, Box<dyn E
     Ok(path)
 } 
 
+pub fn create_readme(dir_path: &Path, question: &QuestionMetadata) -> Result<(), Box<dyn Error>> {
+    let qid = &question.qid;
+    let title = &question.title;
+    let slug = &question.title_slug;
+    let base_url = reqwest::Url::parse("https://leetcode.com/problems/")?;
+    let url = base_url.join(slug)?;
+
+    let content = format!("#[{}. {}]({})\n", qid, title, url);
+    let file_path = dir_path.join("README.md");
+    fs::write(&file_path, content)?;
+    println!("Successfully saved README.md to: {:?}", file_path);
+    Ok(())
+}
+
 pub fn store_solution(dir_path: &Path, code: &str, lang: Language) -> Result<(), std::io::Error> {
     if !dir_path.exists() {
         fs::create_dir_all(dir_path)?;

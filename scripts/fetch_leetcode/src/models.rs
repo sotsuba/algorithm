@@ -81,15 +81,16 @@ pub struct SubmissionDetailResponse {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum Language {
-    #[serde(rename = "rust")]
     Rust,
-    #[serde(rename = "cpp")]
+    #[serde(alias = "c++")]
     Cpp,
-    #[serde(rename = "python3")]
+    #[serde(alias = "python3", alias = "python")]
     Python,
+    #[serde(other)] 
+    Unknown,
 }
-
 impl Language {
     /// Returns the file extension for the given language
     pub fn extension(&self) -> &'static str {
@@ -97,6 +98,7 @@ impl Language {
             Language::Rust => "rs",
             Language::Cpp => "cpp",
             Language::Python => "py",
+            Language::Unknown => "txt",
         }
     }
 
@@ -106,6 +108,7 @@ impl Language {
             Language::Rust => "rust",
             Language::Cpp => "cpp",
             Language::Python => "python3",
+            Language::Unknown => "unknown",
         }
     }
 }
@@ -117,7 +120,7 @@ impl FromStr for Language {
         match s.to_lowercase().as_str() {
             "rust" | "rs" => Ok(Language::Rust),
             "cpp" | "c++" => Ok(Language::Cpp),
-            "python" | "py" | "python3" => Ok(Language::Python),
+            "python" => Ok(Language::Python),
             _ => Err(format!("Unsupported language: {}", s)),
         }
     }

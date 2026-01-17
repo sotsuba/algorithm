@@ -1,4 +1,6 @@
-.PHONY: rust cpp py
+.PHONY: rust cpp py move
+
+EXTS ?= cpp rs py
 
 rust: 
 	rustc main.rs -o bin/rust && bin/rust 
@@ -12,4 +14,9 @@ py:
 move:
 	@echo "Target Directory is: [$(DIR)]"
 	@read -p "Are you sure? [y/N] " ans && [ $${ans:-N} = y ]
-	cp -v main.* $(DIR)/
+	mkdir $(DIR) -p
+	@for ext in $(EXTS); do \
+		if [ -f main.$$ext ]; then \
+			cp -v main.$$ext $(DIR)/; \
+		fi \
+	done

@@ -7,7 +7,7 @@ use serde_json::json;
 use std::path::PathBuf;
 
 use crate::models::{SyncResult, QuestionMetadata, DailyResponse, Submission, SubmissionListResponse, SubmissionDetailResponse, Language};
-use crate::utils::{get_problem_dir, store_solution};
+use crate::utils::{get_problem_dir, store_solution, create_readme};
 pub struct Client { 
     inner: reqwest::Client,
     base_url: reqwest::Url,
@@ -47,6 +47,7 @@ impl Client {
                 let code = self.get_submission_details(id).await?;
                 let path = get_problem_dir(&metadata)?;
                 store_solution(&path, &code, target_lang);
+                create_readme(&path, &metadata);
                 Ok(Some(SyncResult{ code, path }))   
             },
             None => Ok(None),
