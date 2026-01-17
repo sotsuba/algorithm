@@ -9,3 +9,4 @@ playground/bin/*
 **/*.pyc 
 __pycache__/
 bin/
+design-patterns/
