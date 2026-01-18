@@ -14,5 +14,3 @@ int main() {
     std::cin >> n;
     weird_algo(n);
 }
-
-// https://cses.fi/problemset/task/1068

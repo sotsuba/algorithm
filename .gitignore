@@ -10,3 +10,4 @@ playground/bin/*
 __pycache__/
 bin/
 design-patterns/
+tools/

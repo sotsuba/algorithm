@@ -23,7 +23,7 @@ pub fn get_problem_dir(question: &QuestionMetadata) -> Result<PathBuf, Box<dyn E
         Err(_) => qid.to_lowercase().replace(' ', "_"),
     };
     
-    let dir_name = format!("leetcode/{}-{}", formatted_id, slug);
+    let dir_name = format!("problems/leetcode/{}-{}", formatted_id, slug);
     let mut path = get_project_dir()?;
     path.push(dir_name);
     fs::create_dir_all(&path).expect("Cannot create a directory.");

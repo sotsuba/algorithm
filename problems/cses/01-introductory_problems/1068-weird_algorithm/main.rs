@@ -19,5 +19,3 @@ fn weird_algo(n: u64) {
 fn main() {
     weird_algo(read());   
 }
-
-// https://cses.fi/problemset/task/1068
