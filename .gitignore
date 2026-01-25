@@ -9,5 +9,6 @@ playground/bin/*
 **/*.pyc 
 __pycache__/
 bin/
-design-patterns/
 tools/
+fraction/
+fun_place/
