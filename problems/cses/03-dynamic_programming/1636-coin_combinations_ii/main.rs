@@ -37,11 +37,8 @@ fn main() {
     const MOD: usize = 10_usize.pow(9) + 7;
     let mut dp = vec![0_usize; expected + 1];
     dp[0] = 1;
-    for j in 1..=expected {
-        for i in 1..=n {
-            if j < coins[i] {
-                continue;
-            }
+    for i in 1..=n {
+        for j in coins[i]..=expected {
             dp[j] = (dp[j] + dp[j - coins[i]]) % MOD;
         }
     }

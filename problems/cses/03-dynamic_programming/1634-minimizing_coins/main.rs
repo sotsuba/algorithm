@@ -28,22 +28,26 @@ fn main() {
     // ================== //
 
     let n: usize = sc.next();
-    let expected: usize = sc.next();
-    let mut coins = vec![0_usize; n + 1];
+    let target: usize = sc.next();
+    let mut data = vec![0; n + 1];
     for i in 1..=n {
-        coins[i] = sc.next();
+        data[i] = sc.next();
     }
 
-    const MOD: usize = 10_usize.pow(9) + 7;
-    let mut dp = vec![0_usize; expected + 1];
-    dp[0] = 1;
-    for j in 1..=expected {
-        for i in 1..=n {
-            if j < coins[i] {
+    let mut achivable_sum = vec![usize::MAX; target + 1];
+    achivable_sum[0] = 0;
+
+    for i in 1..=n {
+        for sum in data[i]..=target {
+            if achivable_sum[sum - data[i]] == usize::MAX {
                 continue;
             }
-            dp[j] = (dp[j] + dp[j - coins[i]]) % MOD;
+            achivable_sum[sum] = achivable_sum[sum].min(achivable_sum[sum - data[i]] + 1);
         }
     }
-    println!("{}", dp[expected]);
+    if achivable_sum[target] == usize::MAX {
+        println!("-1");
+    } else {
+        println!("{}", achivable_sum[target]);
+    }
 }
