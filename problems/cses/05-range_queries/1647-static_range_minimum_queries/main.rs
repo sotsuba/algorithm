@@ -44,7 +44,7 @@ impl Rmq {
         }
     }
 
-    fn query(&self, left_bound: usize, right_bound: usize) -> usize {
+    pub fn query(&self, left_bound: usize, right_bound: usize) -> usize {
         let left_block_id = left_bound / self.block_size;
         let right_block_id = right_bound / self.block_size;
         let remain_right = right_bound % self.block_size;
