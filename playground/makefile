@@ -3,7 +3,7 @@
 EXTS ?= cpp rs py
 
 rust: 
-	rustc draft.rs -o bin/rust && bin/rust 
+	rustc src/draft.rs -o bin/rust && bin/rust 
 
 cpp:
 	g++ -g draft.cpp -o bin/cpp && bin/cpp
