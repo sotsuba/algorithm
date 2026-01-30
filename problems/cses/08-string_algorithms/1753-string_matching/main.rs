@@ -49,20 +49,14 @@ fn prefix_function(s: &str) -> Vec<usize> {
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
     let text: String = sc.next();
-    let n = text.len();
+    let pattern: String = sc.next();
+    let comb = format!("{}@{}", pattern, text);
 
-    let pi = prefix_function(&text);
-    let mut results = Vec::new();
-    let mut k = pi[n - 1];
-
-    while k > 0 {
-        results.push(k);
-        k = pi[k - 1];
-    }
-
-    for length in results.into_iter().rev() {
-        write!(out, "{} ", length).ok();
-    }
+    let num_matches = prefix_function(&comb)
+        .into_iter()
+        .filter(|&val| val == pattern.len())
+        .count();
+    writeln!(out, "{}", num_matches).ok();
 }
 
 fn load_input() -> String {
