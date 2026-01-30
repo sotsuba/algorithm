@@ -16,10 +16,17 @@ is_sunday() {
 sync_for_the_day() {
     local timestamp=$(date +'%Y-%m-%d')
 
+    git add .
+
+    local cses_count=$(git diff --cached --name-only | grep "problems/cses/.*\.rs" | wc -l)
+    local cf_count=$(git diff --cached --name-only | grep "problems/codeforces/.*\.rs" | wc -l)
+    local lc_count=$(git diff --cached --name-only | grep "problems/leetcode/.*\.rs" | wc -l)
+
+    local commit_msg="daily-sync: $timestamp | cses: $cses_count | cf: $cf_count | lc: $lc_count"
+
     echo "[$(date)] Starting daily sync..." | tee -a "$GITHUB_LOGS"
     {
-        git add . && \
-        git commit -m "daily-sync: $timestamp" && \
+        git commit -m "$commit_msg" && \
         git push origin main
     } | tee -a "$GITHUB_LOGS" 2>&1
 
