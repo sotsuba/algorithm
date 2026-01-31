@@ -30,45 +30,25 @@ fn main() {
     solve(&mut sc, &mut out);
 }
 
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
-
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
-
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
-        }
-    }
-}
-
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
+    let n: usize = sc.next();
+
+    let mut arr = vec![0_i64; n + 1];
+    let mut pref = vec![0_i64; n + 1];
+
+    for i in 1..=n {
+        arr[i] = sc.next();
+        pref[i] = pref[i - 1] + arr[i];
     }
 
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    let mut answer = pref[1];
+    let mut min_prefix = pref[0];
+
+    for i in 1..=n {
+        answer = answer.max(pref[i] - min_prefix);
+        min_prefix = min_prefix.min(pref[i]);
     }
+    writeln!(out, "{}", answer).ok();
 }
 
 fn load_input() -> String {

@@ -30,44 +30,38 @@ fn main() {
     solve(&mut sc, &mut out);
 }
 
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
-
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
-
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
+fn prefix_function(s: &str) -> Vec<usize> {
+    let s = s.as_bytes();
+    let n = s.len();
+    let mut pi = vec![0_usize; n];
+    for i in 1..n {
+        let mut j = pi[i - 1];
+        while j > 0 && s[i] != s[j] {
+            j = pi[j - 1];
         }
+        if s[i] == s[j] {
+            j += 1;
+        }
+        pi[i] = j;
     }
+    pi
 }
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
+    let text: String = sc.next();
+    let n = text.len();
+
+    let pi = prefix_function(&text);
+    let mut results = Vec::new();
+    let mut k = pi[n - 1];
+
+    while k > 0 {
+        results.push(k);
+        k = pi[k - 1];
     }
 
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    for length in results.into_iter().rev() {
+        write!(out, "{} ", length).ok();
     }
 }
 

@@ -30,44 +30,27 @@ fn main() {
     solve(&mut sc, &mut out);
 }
 
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
+fn solve(sc: &mut Scanner, out: &mut impl Write) {
+    let (n, q): (usize, usize) = (sc.next(), sc.next());
 
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
+    let mut prf = vec![vec![0_usize; n + 1]; n + 1];
 
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
+    for i in 1..=n {
+        let line: String = sc.next();
+        let line_bytes = line.as_bytes();
+        for j in 1..=n {
+            prf[i][j] = prf[i - 1][j] + prf[i][j - 1] - prf[i - 1][j - 1];
+            if line_bytes[j - 1] == b'*' {
+                prf[i][j] += 1;
+            }
         }
     }
-}
 
-fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
-    }
-
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    for _ in 0..q {
+        let (ax, ay): (usize, usize) = (sc.next(), sc.next());
+        let (bx, by): (usize, usize) = (sc.next(), sc.next());
+        let answer = prf[bx][by] - prf[bx][ay - 1] - prf[ax - 1][by] + prf[ax - 1][ay - 1];
+        writeln!(out, "{}", answer).ok();
     }
 }
 

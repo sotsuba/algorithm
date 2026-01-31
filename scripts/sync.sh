@@ -12,7 +12,7 @@ has_changes() {
 sync_for_the_day() {
     local timestamp=$(date +'%Y-%m-%d')
 
-    git add problems/
+    git add .
 
     local cses_count=$(git diff --cached --name-only | grep "problems/cses/.*\.rs" | wc -l)
     local cf_count=$(git diff --cached --name-only | grep "problems/codeforces/.*\.rs" | wc -l)

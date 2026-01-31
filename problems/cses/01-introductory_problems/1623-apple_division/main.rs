@@ -30,45 +30,29 @@ fn main() {
     solve(&mut sc, &mut out);
 }
 
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
-
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
-
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
-        }
-    }
-}
-
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
+    let n: usize = sc.next();
+    let mut arr: Vec<i64> = Vec::with_capacity(n);
+    for _ in 0..n {
+        arr.push(sc.next());
     }
 
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    let mut ans = i64::MAX;
+
+    for mask in 0..((1 << n) - 1) {
+        let mut sub1 = 0;
+        let mut sub2 = 0;
+        for i in 0..n {
+            if (mask >> i) & 1 == 1 {
+                sub1 += arr[i];
+            } else {
+                sub2 += arr[i];
+            }
+        }
+        ans = ans.min((sub1 - sub2).abs());
     }
+
+    writeln!(out, "{}", ans).ok();
 }
 
 fn load_input() -> String {

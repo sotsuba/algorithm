@@ -30,45 +30,26 @@ fn main() {
     solve(&mut sc, &mut out);
 }
 
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
-
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
-
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
-        }
-    }
-}
+const MOD: usize = 10_usize.pow(9) + 7;
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
-    }
+    let n: usize = sc.next();
 
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    let sum = n * (n + 1) / 2;
+    if sum % 2 == 1 {
+        writeln!(out, "0").ok();
+        return;
     }
+    let half_sum = sum / 2;
+
+    let mut dp = vec![0_usize; half_sum + 1];
+    dp[0] = 1;
+    for i in 1..n {
+        for cur in (i..=half_sum).rev() {
+            dp[cur] = (dp[cur] + dp[cur - i]) % MOD;
+        }
+    }
+    writeln!(out, "{}", dp[half_sum]).ok();
 }
 
 fn load_input() -> String {

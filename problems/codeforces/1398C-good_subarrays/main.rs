@@ -27,48 +27,41 @@ fn main() {
     let out = io::stdout();
     let mut out = BufWriter::new(out.lock());
 
-    solve(&mut sc, &mut out);
-}
-
-fn generate_permutation(
-    curr: &mut String,
-    len: usize,
-    char_count: &mut [usize],
-    perms: &mut Vec<String>,
-) {
-    if curr.len() == len {
-        perms.push(curr.to_string());
-        return;
-    }
-
-    for i in 0..26 {
-        if char_count[i] > 0 {
-            char_count[i] -= 1;
-            let c = (b'a' + i as u8) as char;
-
-            curr.push(c);
-            generate_permutation(curr, len, char_count, perms);
-
-            curr.pop();
-            char_count[i] += 1;
-        }
+    let q: usize = sc.next();
+    for _ in 0..q {
+        solve(&mut sc, &mut out);
     }
 }
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
+    let n: usize = sc.next();
+    let mut arr = Vec::with_capacity(n + 1);
+    arr.push(0);
     let s: String = sc.next();
-    let mut curr = String::new();
-    let mut char_count = [0_usize; 26];
-    for &b in s.as_bytes() {
-        char_count[(b - b'a') as usize] += 1;
+    for c in s.as_bytes() {
+        arr.push((c - b'0') as i32);
     }
 
-    let mut perms: Vec<String> = Vec::new();
-    generate_permutation(&mut curr, s.len(), &mut char_count, &mut perms);
-    writeln!(out, "{}", perms.len()).ok();
-    for perm in &perms {
-        writeln!(out, "{}", &perm).ok();
+    let mut pref = vec![0_i32; n + 1];
+    let mut stack = vec![0_i32; n + 1];
+    for i in 1..=n {
+        pref[i] = pref[i - 1] + arr[i];
+        stack[i] = pref[i] - (i as i32);
     }
+
+    stack.sort_unstable();
+    stack.push(i32::MAX);
+
+    let mut ans = 0;
+    let mut l = 0;
+    for r in 1..=(n + 1) {
+        if stack[r] != stack[l] {
+            let x = r - l;
+            ans += x * (x - 1) / 2;
+            l = r;
+        }
+    }
+    writeln!(out, "{}", ans);
 }
 
 fn load_input() -> String {
