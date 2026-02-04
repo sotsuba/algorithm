@@ -3,6 +3,7 @@
 EXTS ?= cpp rs py
 
 rust: 
+	@clear
 	rustc src/draft.rs -o bin/rust && bin/rust 
 
 cpp:

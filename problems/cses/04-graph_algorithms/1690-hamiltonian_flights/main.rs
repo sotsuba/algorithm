@@ -35,6 +35,32 @@ fn main() {
 
 const MOD: i32 = 1_000_000_007;
 
+fn backtrack(
+    mask: usize,
+    curr: usize,
+    n: usize,
+    dp: &mut Vec<Vec<i32>>,
+    adj: &Vec<Vec<usize>>,
+) -> i32 {
+    if curr == n - 1 {
+        return if mask == (1 << n) - 1 { 1 } else { 0 };
+    }
+
+    if dp[mask][curr] != -1 {
+        return dp[mask][curr];
+    }
+
+    let mut res = 0;
+
+    for &next in &adj[curr] {
+        if (mask >> next) & 1 == 0 {
+            res = (res + backtrack(mask | (1 << next), next, n, dp, adj)) % MOD;
+        }
+    }
+    dp[mask][curr] = res;
+    dp[mask][curr]
+}
+
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
     let n: usize = sc.next();
     let m: usize = sc.next();
@@ -45,30 +71,9 @@ fn solve(sc: &mut Scanner, out: &mut impl Write) {
         let v = sc.next::<usize>() - 1;
         adj[u].push(v);
     }
-    let mut dp = vec![vec![0_i32; n]; n * (1 << n)];
-    dp[1][0] = 1;
-    for mask in 1..(1 << n) {
-        for u in 0..n {
-            if dp[mask][u] == 0 {
-                continue;
-            }
-
-            for &v in &adj[u] {
-                if (mask >> v) & 1 == 1 {
-                    continue;
-                }
-
-                let next_mask = mask | (1 << v);
-
-                if v == n - 1 && next_mask != (1 << n) - 1 {
-                    continue;
-                }
-
-                dp[next_mask][v] = (dp[next_mask][v] + dp[mask][u]) % MOD;
-            }
-        }
-    }
-    writeln!(out, "{:?}", dp[(1 << n) - 1][n - 1]).ok();
+    let mut dp = vec![vec![-1_i32; n]; 1 << n];
+    let answer = backtrack(1, 0, n, &mut dp, &adj);
+    writeln!(out, "{}", answer).ok();
 }
 
 fn load_input() -> String {

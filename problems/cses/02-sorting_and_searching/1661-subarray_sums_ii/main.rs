@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::io::{self, BufWriter, Read, Write};
 
 struct Scanner<'a> {
@@ -27,48 +28,32 @@ fn main() {
     let out = io::stdout();
     let mut out = BufWriter::new(out.lock());
 
-    // let q: usize = sc.next();
-    // for _ in 0..q {
     solve(&mut sc, &mut out);
-    // }
 }
-
-const MOD: i32 = 1_000_000_007;
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
     let n: usize = sc.next();
-    let m: usize = sc.next();
+    let m: i64 = sc.next();
 
-    let mut adj = vec![Vec::new(); n];
-    for _ in 0..m {
-        let u = sc.next::<usize>() - 1;
-        let v = sc.next::<usize>() - 1;
-        adj[u].push(v);
-    }
-    let mut dp = vec![vec![0_i32; n]; n * (1 << n)];
-    dp[1][0] = 1;
-    for mask in 1..(1 << n) {
-        for u in 0..n {
-            if dp[mask][u] == 0 {
-                continue;
-            }
+    let mut map = HashMap::with_capacity(n + 1);
+    map.insert(0, 1);
 
-            for &v in &adj[u] {
-                if (mask >> v) & 1 == 1 {
-                    continue;
-                }
+    let mut current_prf: i64 = 0;
+    let mut answer: i64 = 0;
 
-                let next_mask = mask | (1 << v);
+    for _ in 0..n {
+        let val: i32 = sc.next();
+        current_prf += val as i64;
 
-                if v == n - 1 && next_mask != (1 << n) - 1 {
-                    continue;
-                }
+        let target = current_prf - m;
 
-                dp[next_mask][v] = (dp[next_mask][v] + dp[mask][u]) % MOD;
-            }
+        if let Some(&count) = map.get(&target) {
+            answer += count;
         }
+
+        *map.entry(current_prf).or_insert(0) += 1;
     }
-    writeln!(out, "{:?}", dp[(1 << n) - 1][n - 1]).ok();
+    writeln!(out, "{}", answer).unwrap();
 }
 
 fn load_input() -> String {

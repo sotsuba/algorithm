@@ -33,42 +33,43 @@ fn main() {
     // }
 }
 
-const MOD: i32 = 1_000_000_007;
-
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
-    let n: usize = sc.next();
-    let m: usize = sc.next();
-
-    let mut adj = vec![Vec::new(); n];
-    for _ in 0..m {
-        let u = sc.next::<usize>() - 1;
-        let v = sc.next::<usize>() - 1;
-        adj[u].push(v);
+    let (n, m, k): (usize, usize, usize) = (sc.next(), sc.next(), sc.next());
+    let mut arr = vec![0_i64; n + 1];
+    for i in 1..=n {
+        arr[i] = sc.next();
     }
-    let mut dp = vec![vec![0_i32; n]; n * (1 << n)];
-    dp[1][0] = 1;
-    for mask in 1..(1 << n) {
-        for u in 0..n {
-            if dp[mask][u] == 0 {
-                continue;
-            }
 
-            for &v in &adj[u] {
-                if (mask >> v) & 1 == 1 {
-                    continue;
-                }
-
-                let next_mask = mask | (1 << v);
-
-                if v == n - 1 && next_mask != (1 << n) - 1 {
-                    continue;
-                }
-
-                dp[next_mask][v] = (dp[next_mask][v] + dp[mask][u]) % MOD;
-            }
-        }
+    let mut operations = vec![(0_usize, 0_usize, 0_i64); m + 1];
+    for i in 1..=m {
+        operations[i] = (sc.next(), sc.next(), sc.next());
     }
-    writeln!(out, "{:?}", dp[(1 << n) - 1][n - 1]).ok();
+
+    let mut diff_operations = vec![(0_i64); m + 2];
+    for _ in 0..k {
+        let (x, y): (usize, usize) = (sc.next(), sc.next());
+        diff_operations[x] += 1;
+        diff_operations[y + 1] -= 1;
+    }
+
+    for i in 1..=m {
+        diff_operations[i] += diff_operations[i - 1];
+    }
+
+    let mut diff_arr = vec![0_i64; n + 2];
+    for i in 1..=m {
+        let (x, y, d) = operations[i];
+        diff_arr[x] += d * diff_operations[i];
+        diff_arr[y + 1] -= d * diff_operations[i];
+    }
+    for i in 1..=n {
+        diff_arr[i] += diff_arr[i - 1];
+    }
+
+    for i in 1..=n {
+        write!(out, "{} ", arr[i] + diff_arr[i]);
+    }
+    writeln!(out);
 }
 
 fn load_input() -> String {

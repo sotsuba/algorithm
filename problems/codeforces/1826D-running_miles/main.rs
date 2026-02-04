@@ -27,48 +27,36 @@ fn main() {
     let out = io::stdout();
     let mut out = BufWriter::new(out.lock());
 
-    // let q: usize = sc.next();
-    // for _ in 0..q {
-    solve(&mut sc, &mut out);
-    // }
+    let q: usize = sc.next();
+    for _ in 0..q {
+        solve(&mut sc, &mut out);
+    }
 }
-
-const MOD: i32 = 1_000_000_007;
 
 fn solve(sc: &mut Scanner, out: &mut impl Write) {
     let n: usize = sc.next();
-    let m: usize = sc.next();
-
-    let mut adj = vec![Vec::new(); n];
-    for _ in 0..m {
-        let u = sc.next::<usize>() - 1;
-        let v = sc.next::<usize>() - 1;
-        adj[u].push(v);
+    let mut arr: Vec<i64> = Vec::with_capacity(n);
+    for _ in 0..n {
+        arr.push(sc.next());
     }
-    let mut dp = vec![vec![0_i32; n]; n * (1 << n)];
-    dp[1][0] = 1;
-    for mask in 1..(1 << n) {
-        for u in 0..n {
-            if dp[mask][u] == 0 {
-                continue;
-            }
-
-            for &v in &adj[u] {
-                if (mask >> v) & 1 == 1 {
-                    continue;
-                }
-
-                let next_mask = mask | (1 << v);
-
-                if v == n - 1 && next_mask != (1 << n) - 1 {
-                    continue;
-                }
-
-                dp[next_mask][v] = (dp[next_mask][v] + dp[mask][u]) % MOD;
-            }
-        }
+    let mut max_pref = vec![i64::MIN; n];
+    let mut max_suff = vec![i64::MIN; n];
+    max_pref[0] = arr[0];
+    for i in 1..n {
+        max_pref[i] = max_pref[i - 1].max(arr[i] + i as i64);
     }
-    writeln!(out, "{:?}", dp[(1 << n) - 1][n - 1]).ok();
+
+    max_suff[n - 1] = arr[n - 1] - (n - 1) as i64;
+    for i in (0..n - 1).rev() {
+        max_suff[i] = max_suff[i + 1].max(arr[i] - i as i64);
+    }
+
+    let mut ans = i64::MIN;
+    for i in 1..(n - 1) {
+        ans = ans.max(max_pref[i - 1] + max_suff[i + 1] + arr[i]);
+    }
+
+    writeln!(out, "{}", ans).ok();
 }
 
 fn load_input() -> String {
