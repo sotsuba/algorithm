@@ -1,19 +1,34 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 #define ll long long 
+#define FOR(i, a, b) for (int i = a; i < b; ++i)
+#define ROF(i, b, a) for (int i = b; i >= a; i--)
 
-using std::cin, std::cout, std::vector;
+using namespace std;
 
-int main() {
-    int n; 
-    cin >> n;
+void setup();
+void solve();
+
+int main()
+{
+    setup();
+    solve();
+}
+
+void setup() 
+{
+    ios_base::sync_with_stdio(false);
     
-    ll ans = 1;
-    const int MOD = 1e9 + 7;
+    cin.tie(NULL);
+    cout.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("data/input.txt", "r", stdin);
+    #endif
+}
 
-    for (int i = 0; i < n; i++) 
-        (ans *= 2LL) %= MOD;
-    
-    cout << ans << '\n';
+struct TestCase {
+    int n;
+}
+
+void solve() 
+{   
 }

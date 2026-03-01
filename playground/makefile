@@ -7,7 +7,7 @@ rust:
 	rustc src/draft.rs -o bin/rust && bin/rust 
 
 cpp:
-	g++ -g draft.cpp -o bin/cpp && bin/cpp
+	g++ -g src/draft.cpp -o bin/cpp && bin/cpp
 
 py:
 	python draft.py	
