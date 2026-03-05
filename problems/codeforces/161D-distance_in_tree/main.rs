@@ -7,60 +7,56 @@ fn main() {
 
 mod solution {
     use super::*;
-    fn dfs1(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], down: &mut [i32]) {
-        for &v in &adj[u] {
-            if v == p { continue; }
-            dfs1(v, u, adj, colors, down);
-            down[u] += down[v].max(0);
-        }
-    }
     
-    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], up: &mut [i32], down: &mut [i32]) {
+    fn dfs(u: usize, p: usize, k: usize, adj: &[Vec<usize>], dp: &mut [Vec<usize>], ans: &mut usize) {
+        dp[u][0] = 1;
+
+
         for &v in &adj[u] {
             if v == p { continue; }
-            dfs1(v, u, adj, colors, up, down);
-            down[u] += down[v].max(0);
+            dfs(v, u, k, adj, dp, ans);
+
+            for d in 0..k {
+                *ans += dp[u][k - d - 1] * dp[v][d];
+            }
+            
+            for size in 1..=k {
+                dp[u][size] += dp[v][size - 1];
+            }
         }
     }
 
     pub fn solve(tc: TestCase) {
-        let TestCase { n, colors, adj } = tc;
-        let mut up = colors.clone();
-        let mut down = colors.clone();
-        dfs1(1, 0, &adj, &colors, &mut up, &mut down);
-        let ans: Vec<i32> = (1..n).map(|i| down[i] + up[i].max(0)).collect();
+        let TestCase { n, k, adj } = tc;
+        let mut dp = vec![vec![0_usize; k + 1]; n + 1];
+        let root = 1;
+        let mut ans = 0;
+        dfs(root, 0, k, &adj, &mut dp, &mut ans);
         
-        println!("{:?}", &ans[1..]);
-        println!("{:?}", &up[1..]);
-        println!("{:?}", &down[1..]);
+        println!("{}", ans);
     }
+    
 }
 
 pub struct TestCase {
     n: usize,
-    colors: Vec<i32>,
+    k: usize,
     adj: Vec<Vec<usize>>,
 }
 
 impl TestCase {
     pub fn new(sc: &mut Scanner) -> Self {
         let n = sc.next();
-        let mut colors = vec![0_i32; n + 1];
-        let mut adj = vec![vec![]; n + 1];
-
-        for i in 1..=n {
-            colors[i] = if sc.next::<usize>() == 1 { 1 } else { -1 };
-        }
-
-        for _ in 2..=n {
+        let k = sc.next();
+        let mut adj: Vec<Vec<usize>> = vec![vec![]; n + 1];
+        for _ in 1..n {
             let u: usize = sc.next();
             let v: usize = sc.next();
-
             adj[u].push(v);
             adj[v].push(u);
         }
 
-        Self { n, colors, adj }
+        Self { n, k, adj }
     }
 }
 

@@ -7,51 +7,52 @@ fn main() {
 
 mod solution {
     use super::*;
-    fn dfs1(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], down: &mut [i32]) {
+    fn dfs1(u: usize, p: usize, adj: &[Vec<usize>], sum: &mut [usize], dp: &mut [usize]) {
         for &v in &adj[u] {
             if v == p { continue; }
-            dfs1(v, u, adj, colors, down);
-            down[u] += down[v].max(0);
+            dfs1(v, u, adj, sum, dp);
+            sum[u] += sum[v];
+            dp[u] += sum[v] + dp[v];
         }
     }
-    
-    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], up: &mut [i32], down: &mut [i32]) {
+
+    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], total: usize, sum: &[usize], dp: &mut [usize]) {
         for &v in &adj[u] {
             if v == p { continue; }
-            dfs1(v, u, adj, colors, up, down);
-            down[u] += down[v].max(0);
+            dp[v] = dp[u] + total - 2 * sum[v];
+            dfs2(v, u, adj, total, sum, dp);
         }
     }
 
     pub fn solve(tc: TestCase) {
-        let TestCase { n, colors, adj } = tc;
-        let mut up = colors.clone();
-        let mut down = colors.clone();
-        dfs1(1, 0, &adj, &colors, &mut up, &mut down);
-        let ans: Vec<i32> = (1..n).map(|i| down[i] + up[i].max(0)).collect();
+        let TestCase { n, score, adj } = tc;
         
-        println!("{:?}", &ans[1..]);
-        println!("{:?}", &up[1..]);
-        println!("{:?}", &down[1..]);
+        let mut sum = score.clone();
+        let mut dp = vec![0_usize; n + 1];
+        let root = 1;
+        dfs1(root, 0, &adj, &mut sum, &mut dp);
+        
+        let total: usize = score.iter().sum();
+        dfs2(root, 0, &adj, total, &sum, &mut dp);
+        
+        println!("{}", *dp.iter().max().unwrap());
     }
 }
 
 pub struct TestCase {
     n: usize,
-    colors: Vec<i32>,
+    score: Vec<usize>,
     adj: Vec<Vec<usize>>,
 }
 
 impl TestCase {
     pub fn new(sc: &mut Scanner) -> Self {
         let n = sc.next();
-        let mut colors = vec![0_i32; n + 1];
+
+        let mut score = vec![0_usize; n + 1];
+        for i in 1..=n { score[i] = sc.next(); }
+        
         let mut adj = vec![vec![]; n + 1];
-
-        for i in 1..=n {
-            colors[i] = if sc.next::<usize>() == 1 { 1 } else { -1 };
-        }
-
         for _ in 2..=n {
             let u: usize = sc.next();
             let v: usize = sc.next();
@@ -60,7 +61,7 @@ impl TestCase {
             adj[v].push(u);
         }
 
-        Self { n, colors, adj }
+        Self { n, score, adj }
     }
 }
 

@@ -1,66 +1,65 @@
 fn main() {
     let input = adapted_input();
     let mut sc = Scanner::new(&input);
-    let tc = TestCase::new(&mut sc);
-    solution::solve(tc);
+    let mut q = 1;
+    let mut q: usize = sc.next();
+    while q > 0 {
+        let tc = TestCase::new(&mut sc);
+        solution::solve(tc);
+        q -= 1;
+    }
 }
 
 mod solution {
     use super::*;
-    fn dfs1(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], down: &mut [i32]) {
+    fn dfs(u: usize, p: usize, adj: &[Vec<usize>], score: &[i64], min_slice: &mut [i64], max_slice: &mut [i64]) {
         for &v in &adj[u] {
-            if v == p { continue; }
-            dfs1(v, u, adj, colors, down);
-            down[u] += down[v].max(0);
-        }
-    }
-    
-    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], up: &mut [i32], down: &mut [i32]) {
-        for &v in &adj[u] {
-            if v == p { continue; }
-            dfs1(v, u, adj, colors, up, down);
-            down[u] += down[v].max(0);
+            if p == v { continue; }
+            max_slice[v] = score[v] - min_slice[u].min(0);
+            min_slice[v] = score[v] - max_slice[u].max(0);
+            dfs(v, u, adj, score, min_slice, max_slice);
         }
     }
 
     pub fn solve(tc: TestCase) {
-        let TestCase { n, colors, adj } = tc;
-        let mut up = colors.clone();
-        let mut down = colors.clone();
-        dfs1(1, 0, &adj, &colors, &mut up, &mut down);
-        let ans: Vec<i32> = (1..n).map(|i| down[i] + up[i].max(0)).collect();
-        
-        println!("{:?}", &ans[1..]);
-        println!("{:?}", &up[1..]);
-        println!("{:?}", &down[1..]);
+        let TestCase { n, score, adj } = tc;
+        let mut min_slice = vec![0_i64; n + 1];
+        let mut max_slice = vec![0_i64; n + 1];
+        max_slice[1] = score[1];
+        min_slice[1] = score[1];
+
+        dfs(1, 0, &adj, &score, &mut min_slice, &mut max_slice);
+        for i in 1..=n {
+            print!("{} ", max_slice[i]);
+        }
+        println!();
     }
 }
 
 pub struct TestCase {
     n: usize,
-    colors: Vec<i32>,
+    score: Vec<i64>,
     adj: Vec<Vec<usize>>,
 }
 
 impl TestCase {
     pub fn new(sc: &mut Scanner) -> Self {
         let n = sc.next();
-        let mut colors = vec![0_i32; n + 1];
-        let mut adj = vec![vec![]; n + 1];
-
+        let mut score = vec![0_i64; n + 1];
         for i in 1..=n {
-            colors[i] = if sc.next::<usize>() == 1 { 1 } else { -1 };
+            score[i] = sc.next();
         }
 
+        let mut adj = vec![vec![]; n + 1];
         for _ in 2..=n {
             let u: usize = sc.next();
             let v: usize = sc.next();
-
-            adj[u].push(v);
             adj[v].push(u);
+            adj[u].push(v);
         }
 
-        Self { n, colors, adj }
+
+        Self { n, score, adj }
     }
 }
 

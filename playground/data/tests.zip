@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet alternate" type="text/css" href="/cses.css?1" id="styles">
+  <link rel="stylesheet " type="text/css" href="/cses-dark.css?1" id="styles-dark">
+  <meta name="theme-color" content="#292929" id="theme-color">
+  <script type="application/json" id="darkmode-enabled">true</script>
+  <script src="/ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+  <title>CSES - Increasing Subsequence II - Tests</title></head>
+<body class="with-sidebar norm-width">
+  <div class="header">
+    <div>
+      <a href="/" class="logo"><img src="/logo.png?1" alt="CSES"></a>
+      <a class="menu-toggle" onclick="document.body.classList.toggle('menu-open');">
+        <i class="fas fa-bars"></i>
+      </a>
+      <div class="controls">
+                <a class="account" href="/user/387898">sotsubas</a>
+        <span>&mdash;</span>
+                        <a href="/darkmode" title="Toggle dark mode" onclick="return toggle_theme()"><i aria-label="Dark mode" class="fas fa-adjust"></i><span>Dark mode</span></a>
+                <a href="/logout" title="Log out"><i aria-label="Log out" class="fas fa-sign-out-alt"></i><span>Log out</span></a>
+              </div>
+    </div>
+  </div>
+  <div class="skeleton">
+  <div class="navigation">
+    <div class="title-block">
+                <h3><a href="/problemset/list/">CSES Problem Set</a></h3>
+                <h1>Increasing Subsequence II</h1>
+        <ul class="nav">
+<li><a href="/problemset/task/1748/">Task</a></li>
+<li><a href="/problemset/submit/1748/">Submit</a></li>
+<li><a href="/problemset/view/1748/">Results</a></li>
+<li><a href="/problemset/stats/1748/">Statistics</a></li>
+<li><a href="/problemset/tests/1748/" class="current">Tests</a></li>
+</ul>
+    </div>
+    </div>
+
+<div class="content-wrapper">
+<div class="content">
+
+<p>Here you can download all tests as a zip file.</p><form action="" method="post" >
+<input type="hidden" name="csrf_token" value="824177b32c900b30397b62e945770466">
+<input type="hidden" name="download" value="true">
+<p><input type="submit" value="Download"></p></form>
+
+</div>
+
+<div class="nav sidebar">
+<h4>Dynamic Programming</h4>...
+<a  href="/problemset/task/1093">Two Sets II<span class="task-score icon full"></span></a><a  href="/problemset/task/3314">Mountain Range<span class="task-score icon "></span></a><a  href="/problemset/task/1145">Increasing Subsequence<span class="task-score icon "></span></a><a  href="/problemset/task/1140">Projects<span class="task-score icon "></span></a><a  href="/problemset/task/1653">Elevator Rides<span class="task-score icon zero"></span></a><a  href="/problemset/task/2181">Counting Tilings<span class="task-score icon "></span></a><a  href="/problemset/task/2220">Counting Numbers<span class="task-score icon "></span></a><a class="current" href="/problemset/task/1748">Increasing Subsequence II<span class="task-score icon "></span></a><hr />    <h4>Your submissions</h4>
+
+    </div>
+
+
+</div>
+
+  </div>
+</body>
+</html>

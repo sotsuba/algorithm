@@ -7,60 +7,58 @@ fn main() {
 
 mod solution {
     use super::*;
-    fn dfs1(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], down: &mut [i32]) {
-        for &v in &adj[u] {
-            if v == p { continue; }
-            dfs1(v, u, adj, colors, down);
-            down[u] += down[v].max(0);
+    fn manage_best(best1: &mut usize, best2: &mut usize, cand: usize) {
+        if cand > *best1 {
+            *best2 = *best1;
+            *best1 = cand;
         }
-    }
+        else if cand > *best2 {
+            *best2 = cand;
+        }
+    } 
     
-    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], up: &mut [i32], down: &mut [i32]) {
-        for &v in &adj[u] {
+    fn dfs(u: usize, p: usize, adj: &[Vec<usize>], downward_side: &mut [usize], diameter: &mut usize) {
+        let mut best1 = 0_usize;
+        let mut best2 = 0_usize;
+        
+        for &v in &adj[u] { 
             if v == p { continue; }
-            dfs1(v, u, adj, colors, up, down);
-            down[u] += down[v].max(0);
+            dfs(v, u, adj, downward_side, diameter);
+            
+            let cand = downward_side[v] + 1;
+            manage_best(&mut best1, &mut best2, cand);
         }
+        downward_side[u] = best1;
+        *diameter = (*diameter).max(best1 + best2);
     }
 
     pub fn solve(tc: TestCase) {
-        let TestCase { n, colors, adj } = tc;
-        let mut up = colors.clone();
-        let mut down = colors.clone();
-        dfs1(1, 0, &adj, &colors, &mut up, &mut down);
-        let ans: Vec<i32> = (1..n).map(|i| down[i] + up[i].max(0)).collect();
+        let TestCase { n, adj } = tc;
+        let mut downward_side = vec![0_usize; n + 1];
+        let mut diameter = 0;
         
-        println!("{:?}", &ans[1..]);
-        println!("{:?}", &up[1..]);
-        println!("{:?}", &down[1..]);
+        dfs(1, 0, &adj, &mut downward_side, &mut diameter);
+        println!("{}", diameter);
     }
 }
 
 pub struct TestCase {
     n: usize,
-    colors: Vec<i32>,
     adj: Vec<Vec<usize>>,
 }
 
 impl TestCase {
     pub fn new(sc: &mut Scanner) -> Self {
         let n = sc.next();
-        let mut colors = vec![0_i32; n + 1];
         let mut adj = vec![vec![]; n + 1];
-
-        for i in 1..=n {
-            colors[i] = if sc.next::<usize>() == 1 { 1 } else { -1 };
-        }
-
-        for _ in 2..=n {
+        for _ in 1..n {
             let u: usize = sc.next();
             let v: usize = sc.next();
-
+            
             adj[u].push(v);
             adj[v].push(u);
         }
-
-        Self { n, colors, adj }
+        Self { n, adj }
     }
 }
 
