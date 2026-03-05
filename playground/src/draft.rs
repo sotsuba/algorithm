@@ -15,20 +15,12 @@ mod solution {
         }
     }
     
-    fn dfs2(u: usize, p: usize, adj: &[Vec<usize>], colors: &[i32], up: &mut [i32], down: &mut [i32]) {
-        for &v in &adj[u] {
-            if v == p { continue; }
-            dfs1(v, u, adj, colors, up, down);
-            down[u] += down[v].max(0);
-        }
-    }
-
     pub fn solve(tc: TestCase) {
         let TestCase { n, colors, adj } = tc;
         let mut up = colors.clone();
         let mut down = colors.clone();
         dfs1(1, 0, &adj, &colors, &mut up, &mut down);
-        let ans: Vec<i32> = (1..n).map(|i| down[i] + up[i].max(0)).collect();
+        let mut ans = vec![0_i32; n + 1];
         
         println!("{:?}", &ans[1..]);
         println!("{:?}", &up[1..]);
